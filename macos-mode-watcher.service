@@ -1,0 +1,12 @@
+[Unit]
+Description=macOS-look light/dark mode watcher (Ubuntu -> macOS customization)
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/home/syuhadak/ubuntu-macos-customization/scripts/mode-watcher.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
