@@ -30,6 +30,7 @@ DOCK_BG_COLOR="#eeeeec"
 DOCK_POSITION="BOTTOM"
 DOCK_AUTOHIDE="true"
 DOCK_INTELLIHIDE="true"
+SHOW_APPS_BUTTON=1             # 1 = tampilkan tombol app grid di dock
 
 WALLPAPER_PRESET="tahoe-night"
 WALLPAPER_FILE=""
@@ -83,6 +84,8 @@ OPSI:
   --icon-size PX          Ukuran ikon dock (default: 56)
   --dock-opacity 0.22     Opasitas latar dock 0.0-1.0 (default: 0.22)
   --no-autohide           Dock selalu tampil
+  --show-apps             Tampilkan tombol app grid di dock (default)
+  --no-show-apps          Sembunyikan tombol app grid (ala macOS asli)
   --hide-topbar           Sembunyikan menu bar atas otomatis
   --show-topbar           Menu bar atas selalu tampil (default)
   --wallpaper NAMA        tahoe-night|tahoe-day|bigsur|bigsur-dark|
@@ -125,6 +128,10 @@ while [ "$#" -gt 0 ]; do
       DOCK_BG_OPACITY="$2"; shift 2 ;;
     --no-autohide)
       DOCK_AUTOHIDE="false"; shift ;;
+    --show-apps)
+      SHOW_APPS_BUTTON=1; shift ;;
+    --no-show-apps)
+      SHOW_APPS_BUTTON=0; shift ;;
     --hide-topbar)
       HIDE_TOP_BAR=1; shift ;;
     --show-topbar)
@@ -182,6 +189,7 @@ esac
 
 case "$DOCK_AUTOHIDE" in true|false) ;; *) die "DOCK_AUTOHIDE harus true/false." ;; esac
 case "$DOCK_INTELLIHIDE" in true|false) ;; *) die "DOCK_INTELLIHIDE harus true/false." ;; esac
+case "$SHOW_APPS_BUTTON" in 0|1) ;; *) die "SHOW_APPS_BUTTON harus 1 atau 0." ;; esac
 
 # Kalau auto-hide dimatikan, intellihide juga dimatikan agar dock benar-benar
 # selalu tampil.
@@ -787,8 +795,15 @@ gs_opt org.gnome.shell.extensions.dash-to-dock click-action "minimize-or-preview
 gs_opt org.gnome.shell.extensions.dash-to-dock scroll-action "switch-workspace"
 gs_opt org.gnome.shell.extensions.dash-to-dock show-trash false
 gs_opt org.gnome.shell.extensions.dash-to-dock show-mounts false
-gs_opt org.gnome.shell.extensions.dash-to-dock show-show-apps-button false
-gs_opt org.gnome.shell.extensions.dash-to-dock show-apps-at-top false
+# Tombol "Show Applications" = padanan Start menu Windows / Launchpad macOS.
+if [ "$SHOW_APPS_BUTTON" = "1" ]; then
+  gs_opt org.gnome.shell.extensions.dash-to-dock show-show-apps-button true
+  # Di kiri dock, seperti posisi Launchpad di macOS.
+  gs_opt org.gnome.shell.extensions.dash-to-dock show-apps-at-top true
+else
+  gs_opt org.gnome.shell.extensions.dash-to-dock show-show-apps-button false
+  gs_opt org.gnome.shell.extensions.dash-to-dock show-apps-at-top false
+fi
 gs_opt org.gnome.shell.extensions.dash-to-dock animate-show-apps true
 gs_opt org.gnome.shell.extensions.dash-to-dock transparency-mode "FIXED"
 gs_opt org.gnome.shell.extensions.dash-to-dock custom-background-color true

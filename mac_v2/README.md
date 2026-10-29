@@ -31,6 +31,7 @@ Tema/ikon/kursor/wallpaper memakai proyek **vinceliuice**:
 | Kursor | MacTahoe-light (mode gelap: MacTahoe-dark) / WhiteSur cursors |
 | Wallpaper | MacTahoe night (default), atau Big Sur / Ventura |
 | Dock | Bawah, mengambang, ikon 56 px (bisa diubah), latar 22% opasitas, indikator titik |
+| Tombol menu aplikasi | Tombol grid “Show Applications” di kiri dock (padanan Start menu Windows / Launchpad macOS), bisa disembunyikan |
 | Tombol jendela | Di **kanan**: minimize, maximize, close; warna merah/kuning/hijau dari tema |
 | Terminal | Profil GNOME Terminal “macOS”: background gelap, palet warna, font JetBrains Mono, transparan 10% |
 | Font UI | Inter 11 (fallback Cantarell/Ubuntu) |
@@ -104,6 +105,9 @@ Contoh:
 # Dock selalu tampil (tidak auto-hide)
 ./install.sh --no-autohide
 
+# Sembunyikan tombol app grid (ala macOS asli)
+./install.sh --no-show-apps
+
 # Menu bar atas auto-hide
 ./install.sh --hide-topbar
 ```
@@ -159,6 +163,22 @@ manual dari `~/.themes` dan `~/.local/share/icons`).
 - Pastikan `gsettings get org.gnome.shell.extensions.user-theme name`
   menghasilkan nama tema yang benar.
 - Logout/login (bukan hanya lock screen).
+
+**Tombol menu semua aplikasi (Show Applications) hilang**
+
+Tombol grid 9 titik di kiri dock adalah padanan tombol Start Windows / Launchpad
+macOS. Installer versi lama menyembunyikannya agar mirip macOS asli. Untuk
+memunculkannya lagi (langsung berlaku, tanpa logout):
+
+```bash
+gsettings set org.gnome.shell.extensions.dash-to-dock show-show-apps-button true
+gsettings set org.gnome.shell.extensions.dash-to-dock show-apps-at-top true
+```
+
+Atau jalankan ulang `./install.sh --show-apps`. Kalau tombolnya tetap tidak ada,
+pastikan ekstensi **Ubuntu Dock** aktif (`gnome-extensions enable
+ubuntu-dock@ubuntu.com`). Selama tombol disembunyikan, menu aplikasi tetap bisa
+dibuka dengan **Super+A** atau klik **Activities** lalu ikon grid.
 
 **Tombol jendela belum berwarna**
 - Tema GTK hanya memengaruhi aplikasi GTK. Aplikasi non-GTK (mis. Firefox

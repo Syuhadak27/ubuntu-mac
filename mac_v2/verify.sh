@@ -54,10 +54,19 @@ if [ -n "$SCHEMAS" ] && grep -qx -- "org.gnome.shell.extensions.dash-to-dock" <<
   DOCK_SIZE="$(get org.gnome.shell.extensions.dash-to-dock dash-max-icon-size)"
   DOCK_OPACITY="$(get org.gnome.shell.extensions.dash-to-dock background-opacity)"
   DOCK_AUTOHIDE="$(get org.gnome.shell.extensions.dash-to-dock autohide)"
+  SHOW_APPS="$(get org.gnome.shell.extensions.dash-to-dock show-show-apps-button)"
   printf '  Posisi         : %s\n' "$DOCK_POS"
   printf '  Ukuran ikon    : %s px\n' "$DOCK_SIZE"
   printf '  Opasitas       : %s\n' "$DOCK_OPACITY"
   printf '  Auto-hide      : %s\n' "$DOCK_AUTOHIDE"
+  printf '  Tombol app grid: %s\n' "$SHOW_APPS"
+  if [ "$SHOW_APPS" = "true" ]; then
+    ok "Tombol Show Applications (menu semua aplikasi) tampil."
+  else
+    warn "Tombol Show Applications disembunyikan. Tampilkan dengan:"
+    printf '                 gsettings set org.gnome.shell.extensions.dash-to-dock show-show-apps-button true\n'
+    printf '                 (atau jalankan ./install.sh --show-apps)\n'
+  fi
 else
   bad "Skema Ubuntu Dock tidak ditemukan."
 fi
